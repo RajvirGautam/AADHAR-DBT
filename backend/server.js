@@ -40,8 +40,8 @@ app.post("/api/send-otp", (req, res) => {
     return res.status(400).json({ error: "Phone number not linked with any Aadhaar" });
   }
 
-  otpStore[phone] = "000000"; // Hardcoded OTP
-  res.json({ message: "OTP sent (use 000000)" });
+  otpStore[phone] = "0000"; // Hardcoded OTP
+  res.json({ message: "OTP sent (use 0000)" });
 });
 
 // Verify OTP

@@ -36,18 +36,20 @@ function LoginPage({ setUser }) {
   style={{
     position: "sticky",
     top: 0,
+    padding: "40px 5vw", // <-- use viewport width instead of 120px
+    maxWidth: "100vw", // <-- prevent overflow
     zIndex: 100,
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "left",
-    padding: "40px 120px",
+   // padding: "40px 120px",
     backdropFilter: "blur(12px)",
     borderRadius: "12px",
     margin: 0, // <-- change this from "8px 16px" to 0
     gap: "40px",
   }}
 >
-        <div style={{ fontSize: "20px", fontWeight: "700", color: "#fff" }}>LOGO</div>
+        <div style={{ fontSize: "20px", fontWeight: "700", color: "#fff" }}>Team Tri-state Buffer</div>
         <a href="#" style={{ color: "#fff", textDecoration: "none", fontWeight: "500" }}>
           What is DBT?
         </a>
@@ -75,22 +77,43 @@ function LoginPage({ setUser }) {
         }}
       >
         {/* Localized Aurora Glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: "10%",
-            left: "80%",
-            width: "444px",
-            height: "536px",
-            transform: "translateX(-50%)",
-            borderRadius: "50%",
-            background: "radial-gradient(circle at center, #06b6d4, #8b5cf6, transparent)",
-            filter: "blur(100px)",
-            opacity: 0.7,
-            zIndex: 0,
-          //  overflow: "hidden",
-          }}
-        ></div>
+       {/* Localized Aurora Glow */}
+<div
+  style={{
+    position: "absolute",
+    top: "10%",
+    left: "80%",
+    width: "444px",
+    height: "536px",
+    transform: "translateX(-50%)",
+    borderRadius: "50%",
+    background: "radial-gradient(circle at center, #06b6d4, #8b5cf6, transparent)",
+    filter: "blur(100px)",
+    opacity: 0.7,
+    zIndex: 0,
+    maxWidth: "100%",
+    animation: "glowPulse 3s ease-in-out infinite",
+  }}
+></div>
+
+<style>
+{`
+  @keyframes glowPulse {
+    0% {
+      opacity: 0.3;
+      filter: blur(80px);
+    }
+    50% {
+      opacity: 1;
+      filter: blur(120px);
+    }
+    100% {
+      opacity: 0.3;
+      filter: blur(80px);
+    }
+  }
+`}
+</style>
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: "700px" }}>
           {/* Heading */}
@@ -173,7 +196,7 @@ function LoginPage({ setUser }) {
                 )}
                 <input
                   type="text"
-                  placeholder={step === 1 ? "10-digit mobile number" : "Enter OTP (000000)"}
+                  placeholder={step === 1 ? "10-digit mobile number" : "Enter OTP (0000)"}
                   value={step === 1 ? phone : otp}
                   onChange={(e) =>
                     step === 1 ? setPhone(e.target.value) : setOtp(e.target.value)
