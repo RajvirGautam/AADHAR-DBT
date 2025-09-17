@@ -33,20 +33,20 @@ function LoginPage({ setUser }) {
     <div style={{ backgroundColor: "#000", minHeight: "100vh", position: "relative" }}>
       {/* Navbar */}
       <nav
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          padding: "40px 120px",
-          backdropFilter: "blur(12px)",
-          borderRadius: "12px",
-          margin: "8px 16px",
-          gap: "40px",
-        }}
-      >
+  style={{
+    position: "sticky",
+    top: 0,
+    zIndex: 100,
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "left",
+    padding: "40px 120px",
+    backdropFilter: "blur(12px)",
+    borderRadius: "12px",
+    margin: 0, // <-- change this from "8px 16px" to 0
+    gap: "40px",
+  }}
+>
         <div style={{ fontSize: "20px", fontWeight: "700", color: "#fff" }}>LOGO</div>
         <a href="#" style={{ color: "#fff", textDecoration: "none", fontWeight: "500" }}>
           What is DBT?
@@ -71,6 +71,7 @@ function LoginPage({ setUser }) {
           display: "grid",
           gridTemplateColumns: "1fr",
           gap: "60px",
+         // overflow: "hidden",
         }}
       >
         {/* Localized Aurora Glow */}
@@ -87,6 +88,7 @@ function LoginPage({ setUser }) {
             filter: "blur(100px)",
             opacity: 0.7,
             zIndex: 0,
+          //  overflow: "hidden",
           }}
         ></div>
 
