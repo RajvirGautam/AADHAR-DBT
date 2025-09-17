@@ -22,7 +22,7 @@ function LoginPage({ setUser }) {
   const handleVerifyOtp = async () => {
     try {
       const res = await axios.post(`${API_URL}/api/verify-otp`, { phone, otp });
-      setUser(res.data.user);
+      setUser(res.data);
       setError("");
     } catch (err) {
       setError("Invalid OTP. Try again.");
