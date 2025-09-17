@@ -8,7 +8,7 @@ function StatusChecker({ loggedInAadhaar, onStatusUpdate }) {
 
   const handleCheck = async () => {
     try {
-      const res = await axios.post("http://localhost:6969/api/check-status", {
+      const res = await axios.post("https://aadhar-dbt.onrender.com/api/check-status", {
         aadhaar,
         loggedInAadhaar,
       });

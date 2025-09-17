@@ -7,27 +7,28 @@ function LoginPage({ setUser }) {
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
 
+  const API_URL = "https://aadhar-dbt.onrender.com";
+
   const handleSendOtp = async () => {
     try {
-      await axios.post("http://localhost:6969/api/send-otp", { phone });
+      await axios.post(`${API_URL}/api/send-otp`, { phone });
       setStep(2);
       setError("");
     } catch (err) {
-      setError(err.response?.data?.error || "Error sending OTP");
+      setError("Failed to send OTP. Try again.");
     }
   };
 
   const handleVerifyOtp = async () => {
     try {
-      const res = await axios.post("http://localhost:6969/api/verify-otp", {
-        phone,
-        otp,
-      });
-      setUser(res.data);
+      const res = await axios.post(`${API_URL}/api/verify-otp`, { phone, otp });
+      setUser(res.data.user);
+      setError("");
     } catch (err) {
-      setError(err.response?.data?.error || "Invalid OTP");
+      setError("Invalid OTP. Try again.");
     }
   };
+
 
   return (
     <div style={{ backgroundColor: "#000", minHeight: "100vh", position: "relative" }}>
