@@ -5,42 +5,47 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Mock Aadhaar-User database
+// Predefined users
 const mockUsers = {
-  "123456789012": {
-    name: "Rahul Sharma",
-    dob: "2000-05-15",
-    phone: "8269169453",
-    status: "linked"
-  },
-  "987654321098": {
-    name: "Priya Verma",
-    dob: "1998-12-01",
-    phone: "9111818531",
-    status: "dbt_enabled"
-  },
-  "111122223333": {
-    name: "Amit Kumar",
-    dob: "2002-07-22",
-    phone: "9000000000",
-    status: "not_linked"
-  }
+  "123456789013": { name: "Manish Verma", dob: "2000-05-15", phone: "1", isAADHARseeded: true, isDBTenabled: true },
+  "1": { name: "Manish Verma", dob: "2000-05-15", phone: "1", isAADHARseeded: true, isDBTenabled: true },
+  "123456789012": { name: "Rajvir Gautam", dob: "2000-05-15", phone: "8269169453", isAADHARseeded: true, isDBTenabled: true },
+  "987654321098": { name: "Priya Verma", dob: "1998-12-01", phone: "9111818531", isAADHARseeded: true, isDBTenabled: false },
+  "111122223333": { name: "Amit Kumar", dob: "2002-07-22", phone: "9000000000", isAADHARseeded: false, isDBTenabled: false },
 };
 
-// OTP store (for demo, always 000000)
+// OTP store
 let otpStore = {};
+
+// Random names for fake users
+const randomNames = ["Ananya Singh", "Rohit Mehra", "Sneha Gupta", "Karan Joshi", "Pooja Lal", "Vikram Rao", "Tanya Chauhan", "Ria Patel", "Aditya Jain", "Neha Sharma", "Sameer Roy", "Priyanka Das", "Aakash Verma", "Isha Nair", "Arjun Kapoor"];
+function generateRandomAadhaar() {
+  return String(Math.floor(100000000000 + Math.random() * 899999999999));
+}
+
+function generateRandomUser(phone) {
+  const name = randomNames[Math.floor(Math.random() * randomNames.length)];
+  const dob = `${Math.floor(1980 + Math.random() * 20)}-${String(Math.floor(1 + Math.random() * 12)).padStart(2,'0')}-${String(Math.floor(1 + Math.random() * 28)).padStart(2,'0')}`;
+  
+  const isAADHARseeded = Math.random() < 0.7; // 70% chance seeded
+  const isDBTenabled = isAADHARseeded ? Math.random() < 0.5 : false; // DBT only if Aadhaar seeded
+  const aadhaar = generateRandomAadhaar();
+  
+  return { aadhaar, name, dob, phone, isAADHARseeded, isDBTenabled };
+}
 
 // Send OTP
 app.post("/api/send-otp", (req, res) => {
   const { phone } = req.body;
 
-  const user = Object.values(mockUsers).find(u => u.phone === phone);
+  let user = Object.values(mockUsers).find(u => u.phone === phone);
 
   if (!user) {
-    return res.status(400).json({ error: "Phone number not linked with any Aadhaar" });
+    user = generateRandomUser(phone);
+    mockUsers[user.aadhaar] = user;
   }
 
-  otpStore[phone] = "0000"; // Hardcoded OTP
+  otpStore[phone] = ["0000", "1"];
   res.json({ message: "OTP sent (use 0000)" });
 });
 
@@ -48,10 +53,9 @@ app.post("/api/send-otp", (req, res) => {
 app.post("/api/verify-otp", (req, res) => {
   const { phone, otp } = req.body;
 
-  if (otpStore[phone] && otpStore[phone] === otp) {
-    const user = Object.entries(mockUsers).find(([aadhaar, u]) => u.phone === phone);
-    if (user) {
-      const [aadhaar, userData] = user;
+  if (otpStore[phone] && otpStore[phone].includes(otp)) {    const userEntry = Object.entries(mockUsers).find(([aadhaar, u]) => u.phone === phone);
+    if (userEntry) {
+      const [aadhaar, userData] = userEntry;
       return res.json({ aadhaar, ...userData });
     }
   }
@@ -59,20 +63,20 @@ app.post("/api/verify-otp", (req, res) => {
   res.status(400).json({ error: "Invalid OTP" });
 });
 
-// Aadhaar Status Check (only for logged-in Aadhaar)
+// Aadhaar Status Check
 app.post("/api/check-status", (req, res) => {
   const { aadhaar, loggedInAadhaar } = req.body;
 
-  if (aadhaar !== loggedInAadhaar) {
+  const user = mockUsers[aadhaar];
+  if (!user) return res.status(404).json({ error: "Aadhaar not found" });
+
+  // If predefined user, restrict checking
+  const predefinedAadhaar = ["123456789012","987654321098","111122223333"];
+  if (predefinedAadhaar.includes(aadhaar) && aadhaar !== loggedInAadhaar) {
     return res.status(403).json({ error: "You can only check your own Aadhaar status" });
   }
 
-  const user = mockUsers[aadhaar];
-  if (!user) {
-    return res.status(404).json({ error: "Aadhaar not found" });
-  }
-
-  res.json({ status: user.status });
+  res.json({ isAADHARseeded: user.isAADHARseeded, isDBTenabled: user.isDBTenabled });
 });
 
 const PORT = 6969;

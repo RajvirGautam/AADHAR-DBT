@@ -1,6 +1,0 @@
-[
-    { "aadhaar": "123456789012", "account": "111122223333", "status": "O" },
-    { "aadhaar": "098765432109", "account": "444455556666", "status": "DBT Enabled"},
-    { "aadhaar": "111122223333", "account": "777788889999", "status": "DBT Enabled" },
-    { "aadhaar": "222233334444", "account": "000011112222", "status": "Only Aadhaar Linked" }
-  ] 
