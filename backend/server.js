@@ -10,8 +10,7 @@ app.use(express.json());
 
 // Predefined users
 const mockUsers = {
- // "123456789013": { name: "Manish Verma", dob: "2000-05-15", phone: "1", isAADHARseeded: true, isDBTenabled: true },
-  "1": { name: "Manish Verma", dob: "2000-05-15", phone: "1", isAADHARseeded: true, isDBTenabled: true },
+  "123456789013": { name: "Manish Verma", dob: "2000-05-15", phone: "1", isAADHARseeded: true, isDBTenabled: true },
   "123456789012": { name: "Rajvir Gautam", dob: "2000-05-15", phone: "8269169453", isAADHARseeded: true, isDBTenabled: true },
   "987654321098": { name: "Priya Verma", dob: "1998-12-01", phone: "9111818531", isAADHARseeded: true, isDBTenabled: false },
   "111122223333": { name: "Amit Kumar", dob: "2002-07-22", phone: "9000000000", isAADHARseeded: false, isDBTenabled: false },
